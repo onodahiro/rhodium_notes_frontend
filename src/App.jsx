@@ -2,7 +2,11 @@ import './App.css';
 import TodoList from  './pages/TodoList.jsx';
 import { createStore, createEvent, sample } from "effector";
 
+// api 
+import { saveNote } from './api/note.js';
+
 function App() {
+
   function createTodoListApi(initial = []) {
     const insert = createEvent();
     const remove = createEvent();
@@ -22,7 +26,8 @@ function App() {
 
     // insert action
     $input.reset(insert);
-    $todos.on(insert, (todos, newTodo) => [...todos, newTodo]);
+    // $todos.on(insert, (todos, newTodo) => [...todos, newTodo]);
+    $todos.on(insert, () => console.log(saveNote({text: 'test text'}), process.env.REACT_APP_API_NOTES));
     $filteredTodos.on(insert, () => $todos.getState());
 
     // filtered action

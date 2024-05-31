@@ -1,8 +1,8 @@
-import { useStore, useList } from "effector-react";
+import { useUnit, useList } from "effector-react";
 
 function TodoList({ label, model }) {
-  const input = useStore(model.$input);
-  const searchInput = useStore(model.$searchInput);
+  const input = useUnit(model.$input);
+  const searchInput = useUnit(model.$searchInput);
 
   const todos = useList(model.$filteredTodos, (value, index) => (
     <li>
