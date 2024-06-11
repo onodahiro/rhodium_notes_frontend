@@ -1,11 +1,31 @@
+import React, { useEffect } from 'react';
 import { useUnit, useList } from "effector-react";
 
 // api 
-import { requestSaveNote } from '../api/note.js';
+import { requestGetNotes, requestSaveNotes } from '../api/note.js';
 
 function TodoList({ label, model }) {
+  const isCancelled = React.useRef(false);
   const input = useUnit(model.$input);
   const searchInput = useUnit(model.$searchInput);
+
+
+  
+  useEffect(() => {
+    function fetchNotes() {
+      requestGetNotes().then(res => {
+          model.insert(res.data.data)
+      })
+    }
+
+    if (!isCancelled.current) {
+      fetchNotes();
+    };
+    return () => {
+      isCancelled.current = true;
+    };
+  }, [model]);
+
 
   const todos = useList(model.$filteredTodos, (value, index) => (
     <li>
@@ -17,7 +37,7 @@ function TodoList({ label, model }) {
   ));
 
   function insert() {
-    requestSaveNote({text: input}).then(res => model.insert(res.data.data))
+    requestSaveNotes({text: input}).then(res => model.insert(res.data.data))
   }
 
   return (
@@ -30,7 +50,7 @@ function TodoList({ label, model }) {
           value={input}
           onChange={(event) => model.change(event.currentTarget.value)}
           />
-        <input type="button" onClick={insert} value="Insert2" />
+        <input type="button" onClick={insert} value="Save" />
         </form>
         <form>
         <label>Search todo: </label>

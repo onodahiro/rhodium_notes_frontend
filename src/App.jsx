@@ -5,7 +5,6 @@ import { createStore, createEvent, sample } from "effector";
 
 
 function App() {
-
   function createTodoListApi(initial = []) {
     const insert = createEvent();
     const remove = createEvent();
@@ -19,6 +18,13 @@ function App() {
     const $searchInput = createStore("");
     const $todos = createStore(initial);
     const $filteredTodos = createStore(initial);
+
+    // todo paginationn
+    // const $pagintion = createStore({
+    //   current: 1,
+    //   max: 1,
+
+    // });
   
     $input.on(change, (_, value) => value);
     $searchInput.on(search, (_, value) => value);
@@ -60,7 +66,7 @@ function App() {
     };
   }
   
-  const firstTodoList = createTodoListApi([{ id: 0, text: "hello, world!" }]);
+  const firstTodoList = createTodoListApi();
 
   return (
     <div className="App">
