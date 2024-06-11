@@ -2,8 +2,7 @@ import './App.css';
 import TodoList from  './pages/TodoList.jsx';
 import { createStore, createEvent, sample } from "effector";
 
-// api 
-import { saveNote } from './api/note.js';
+
 
 function App() {
 
@@ -14,6 +13,7 @@ function App() {
     const search = createEvent();
     const filterTodo = createEvent();
     const reset = createEvent();
+
   
     const $input = createStore("");
     const $searchInput = createStore("");
@@ -26,8 +26,7 @@ function App() {
 
     // insert action
     $input.reset(insert);
-    // $todos.on(insert, (todos, newTodo) => [...todos, newTodo]);
-    $todos.on(insert, () => console.log(saveNote({text: 'test text'}), process.env.REACT_APP_API_NOTES));
+    $todos.on(insert, (_, notes) => notes)
     $filteredTodos.on(insert, () => $todos.getState());
 
     // filtered action
@@ -41,14 +40,6 @@ function App() {
     $filteredTodos.on(remove, () => $todos.getState());
     $input.reset(reset);
   
-    const submit = createEvent();
-    submit.watch((event) => event.preventDefault());
-  
-    sample({
-      clock: submit,
-      source: $input,
-      target: insert,
-    });
 
     sample({
       clock: search,
@@ -57,7 +48,7 @@ function App() {
     });
   
     return {
-      submit,
+      insert,
       remove,
       change,
       search,
@@ -69,7 +60,7 @@ function App() {
     };
   }
   
-  const firstTodoList = createTodoListApi(["hello, world!"]);
+  const firstTodoList = createTodoListApi([{ id: 0, text: "hello, world!" }]);
 
   return (
     <div className="App">
