@@ -7,7 +7,7 @@ import { requestGetNotes, requestSaveNotes } from '../api/note.js';
 function TodoList({ label, model }) {
   const isCancelled = React.useRef(false);
   const input = useUnit(model.$input);
-  const searchInput = useUnit(model.$searchInput);
+  // const searchInput = useUnit(model.$searchInput);
 
 
   
@@ -15,6 +15,7 @@ function TodoList({ label, model }) {
     function fetchNotes() {
       requestGetNotes().then(res => {
           model.insert(res.data.data)
+          model.insertPages(res.data.meta)
       })
     }
 
@@ -24,27 +25,27 @@ function TodoList({ label, model }) {
     return () => {
       isCancelled.current = true;
     };
-  }, [model]);
+  }, []);
 
 
-  const todos = useList(model.$filteredTodos, (value, index) => (
+  const todos = useList(model.$todos, (value, index) => (
     <li>
       {`№${value.id}.  ${value.text}`}
-      <button type="button" onClick={() => model.remove(index)}>
-        Remove
-      </button>
     </li>
   ));
 
   function insert() {
-    requestSaveNotes({text: input}).then(res => model.insert(res.data.data))
+    requestSaveNotes({text: input}).then((res) => {
+      model.insert(res.data.data)
+      model.insertPages({links: res.data.links, meta: res.data.meta})
+    })
   }
 
   return (
     <>
       <h1>{label}</h1>
       <form>
-        <label>Insert todo: </label>
+        <label>Insert: </label>
         <input
           type="text"
           value={input}
@@ -52,7 +53,7 @@ function TodoList({ label, model }) {
           />
         <input type="button" onClick={insert} value="Save" />
         </form>
-        <form>
+        {/* <form>
         <label>Search todo: </label>
         <input
           type="text"
@@ -60,7 +61,7 @@ function TodoList({ label, model }) {
           onChange={(event) => model.search(event.currentTarget.value)}
           />
         { searchInput }
-        </form>
+        </form> */}
       <ol>{todos}</ol>
     </>
   );

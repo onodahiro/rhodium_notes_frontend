@@ -5,6 +5,6 @@ export function requestSaveNotes(body) {
   return axios.post(`${process.env.REACT_APP_API_NOTES}-save`, body)
 }
 
-export function requestGetNotes() {
-  return axios.get(`${process.env.REACT_APP_API_NOTES}`)
+export function requestGetNotes(page = 1) {
+  return axios.get(`${process.env.REACT_APP_API_NOTES}?page=${page}`)
 }
