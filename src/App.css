@@ -19,6 +19,17 @@
   align-items: center;
 }
 
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.noteItem {
+  display: flex;
+  gap: 20px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

@@ -49,13 +49,13 @@ function Pagination({ model }) {
     <>
       <div className="pagination-container">
         <button onClick={()=>getNotes(1)}>{'<<<'}</button>
-        <button onClick={()=>getNotes(--current_page)}>{'<'}</button>
+        <button disabled={current_page === 1} onClick={()=>getNotes(--current_page)}>{'<'}</button>
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
             return <div style={ number === current_page ? {color: 'red'} : {color: 'green'}} key={index}> {number} </div>
           })) : ''
         }
-        <button onClick={()=>getNotes(++current_page)}>{'>'}</button>
+        <button disabled={current_page === last_page} onClick={()=>getNotes(++current_page)}>{'>'}</button>
         <button onClick={()=>getNotes(last_page)}>{'>>>'}</button>
       </div>
     </>

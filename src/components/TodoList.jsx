@@ -7,9 +7,10 @@ import { requestGetNotes, requestSaveNotes } from '../api/note.js';
 function TodoList({ label, model }) {
   const isCancelled = React.useRef(false);
   const input = useUnit(model.$input);
-  // const searchInput = useUnit(model.$searchInput);
 
-
+  function checkNote(id) {
+    console.log(id);
+  }
   
   useEffect(() => {
     function fetchNotes() {
@@ -27,12 +28,22 @@ function TodoList({ label, model }) {
     };
   }, []);
 
+  
 
-  const todos = useList(model.$todos, (value, index) => (
-    <li>
-      {`№${value.id}.  ${value.text}`}
-    </li>
-  ));
+  const todos = useList(model.$todos, (value) => {
+    const computedChecked = {
+        textDecoration: value.checked ? 'line-through' : 'none',
+    };
+
+    return <>
+      <div className='noteItem'>
+        <input type='checkbox' onChange={()=>checkNote(value.id)} checked={value.checked}></input>
+        <li style={computedChecked}>
+          {`№${value.id}.  ${value.text}`}
+        </li>
+      </div>
+    </>
+  });
 
   function insert() {
     requestSaveNotes({text: input}).then((res) => {
@@ -53,16 +64,7 @@ function TodoList({ label, model }) {
           />
         <input type="button" onClick={insert} value="Save" />
         </form>
-        {/* <form>
-        <label>Search todo: </label>
-        <input
-          type="text"
-          value={searchInput}
-          onChange={(event) => model.search(event.currentTarget.value)}
-          />
-        { searchInput }
-        </form> */}
-      <ol>{todos}</ol>
+      <ol className='notes-list'>{todos}</ol>
     </>
   );
 }
