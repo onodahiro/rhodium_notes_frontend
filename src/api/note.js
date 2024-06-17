@@ -1,15 +1,39 @@
 import axios from 'axios';
 
-function requestGetNotes(page = 1) {
-  return axios.get(`${process.env.REACT_APP_API_NOTES}?page=${page}`)
+function fetchNotes(model, page = 1) {
+  try {
+    axios.get(`${process.env.REACT_APP_API_NOTES}?page=${page}`)
+    .then(res => {
+      model.insert(res.data.data)
+      model.insertPages(res.data.meta)
+    })
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-function requestSaveNotes(body) {
-  return axios.post(`${process.env.REACT_APP_API_NOTES}/save`, body)
-};
+function fetchSaveNotes(model, text) {
+  try {
+    axios.post(`${process.env.REACT_APP_API_NOTES}/save`, { text })
+    .then((res) => {
+      model.insert(res.data.data)
+      model.insertPages(res.data.meta)
+    })
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-function requestCheckNote(id) {
-  return axios.get(`${process.env.REACT_APP_API_NOTES}/check?id=${id}`)
-};
+function fetchCheckNote(model, id) {
+  try {
+    axios.get(`${process.env.REACT_APP_API_NOTES}/check?id=${id}`)
+    .then((res) => {
+      model.insert(res.data.data)
+      model.insertPages(res.data.meta)
+    })
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-export { requestGetNotes, requestSaveNotes, requestCheckNote  };
+export { fetchNotes, fetchSaveNotes, fetchCheckNote };

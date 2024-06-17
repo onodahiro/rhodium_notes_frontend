@@ -2,7 +2,7 @@ import React from 'react';
 import { useUnit } from "effector-react";
 
 // Api
-import { requestGetNotes } from '../api/note.js';
+import { fetchNotes } from '../api/note.js';
 
 function Pagination({ model }) {
   let { current_page, last_page } = useUnit(model.$pagination);
@@ -38,25 +38,18 @@ function Pagination({ model }) {
     return pages;
   }
 
-  function fetchNotes(page) {
-    requestGetNotes(page).then(res => {
-      model.insert(res.data.data)
-      model.insertPages(res.data.meta)
-    })
-  }
-
   return (
     <>
       <div className="pagination-container">
-        <button onClick={()=>fetchNotes(1)}>{'<<<'}</button>
-        <button disabled={current_page === 1} onClick={()=>fetchNotes(--current_page)}>{'<'}</button>
+        <button onClick={()=>fetchNotes(model, 1)}>{'<<<'}</button>
+        <button disabled={current_page === 1} onClick={()=>fetchNotes(model, --current_page)}>{'<'}</button>
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
             return <div style={ number === current_page ? {color: 'red'} : {color: 'green'}} key={index}> {number} </div>
           })) : ''
         }
-        <button disabled={current_page === last_page} onClick={()=>fetchNotes(++current_page)}>{'>'}</button>
-        <button onClick={()=>fetchNotes(last_page)}>{'>>>'}</button>
+        <button disabled={current_page === last_page} onClick={()=>fetchNotes(model, ++current_page )}>{'>'}</button>
+        <button onClick={()=>fetchNotes(model, last_page)}>{'>>>'}</button>
       </div>
     </>
   );

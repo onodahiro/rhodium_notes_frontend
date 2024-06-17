@@ -2,27 +2,20 @@ import React, { useEffect } from 'react';
 import { useUnit, useList } from "effector-react";
 
 // api 
-import { requestGetNotes, requestSaveNotes, requestCheckNote } from '../api/note.js';
+import { fetchNotes, fetchSaveNotes, fetchCheckNote } from '../api/note.js';
 
 function TodoList({ label, model }) {
   const isCancelled = React.useRef(false);
   const input = useUnit(model.$input);
 
   useEffect(() => {
-    function fetchNotes() {
-      requestGetNotes().then(res => {
-          model.insert(res.data.data)
-          model.insertPages(res.data.meta)
-      })
-    }
-
     if (!isCancelled.current) {
-      fetchNotes();
+      fetchNotes(model);
     };
     return () => {
       isCancelled.current = true;
     };
-  }, []);
+  }, [model]);
 
   
 
@@ -33,27 +26,13 @@ function TodoList({ label, model }) {
 
     return <>
       <div className='noteItem'>
-        <input type='checkbox' onChange={()=>checkNote(value.id)} checked={value.checked}></input>
+        <input type='checkbox' onChange={()=>fetchCheckNote(model, value.id)} checked={value.checked}></input>
         <li style={computedChecked}>
           {`№${value.id}.  ${value.text}`}
         </li>
       </div>
     </>
   });
-
-  function insert() {
-    requestSaveNotes({text: input}).then((res) => {
-      model.insert(res.data.data)
-      model.insertPages({links: res.data.links, meta: res.data.meta})
-    })
-  }
-
-  function checkNote(id) {
-    requestCheckNote(id).then((res) => {
-      model.insert(res.data.data)
-      model.insertPages({links: res.data.links, meta: res.data.meta})
-    })
-  }
 
   return (
     <>
@@ -65,7 +44,7 @@ function TodoList({ label, model }) {
           value={input}
           onChange={(event) => model.change(event.currentTarget.value)}
           />
-        <input type="button" onClick={insert} value="Save" />
+        <input type="button" onClick={() => fetchSaveNotes(model, input)} value="Save" />
         </form>
       <ol className='notes-list'>{todos}</ol>
     </>
