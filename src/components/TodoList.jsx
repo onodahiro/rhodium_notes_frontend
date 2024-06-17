@@ -2,16 +2,12 @@ import React, { useEffect } from 'react';
 import { useUnit, useList } from "effector-react";
 
 // api 
-import { requestGetNotes, requestSaveNotes } from '../api/note.js';
+import { requestGetNotes, requestSaveNotes, requestCheckNote } from '../api/note.js';
 
 function TodoList({ label, model }) {
   const isCancelled = React.useRef(false);
   const input = useUnit(model.$input);
 
-  function checkNote(id) {
-    console.log(id);
-  }
-  
   useEffect(() => {
     function fetchNotes() {
       requestGetNotes().then(res => {
@@ -47,6 +43,13 @@ function TodoList({ label, model }) {
 
   function insert() {
     requestSaveNotes({text: input}).then((res) => {
+      model.insert(res.data.data)
+      model.insertPages({links: res.data.links, meta: res.data.meta})
+    })
+  }
+
+  function checkNote(id) {
+    requestCheckNote(id).then((res) => {
       model.insert(res.data.data)
       model.insertPages({links: res.data.links, meta: res.data.meta})
     })
