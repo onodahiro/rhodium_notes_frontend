@@ -45,7 +45,7 @@ function Pagination({ model }) {
         <button disabled={current_page === 1} onClick={()=>fetchNotes(model, --current_page)}>{'<'}</button>
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
-            return <div style={ number === current_page ? {color: 'red'} : {color: 'green'}} key={index}> {number} </div>
+            return <button onClick={()=>fetchNotes(model, number)} className={number === current_page ? 'active' : ''} key={index}> {number} </button>
           })) : ''
         }
         <button disabled={current_page === last_page} onClick={()=>fetchNotes(model, ++current_page )}>{'>'}</button>
