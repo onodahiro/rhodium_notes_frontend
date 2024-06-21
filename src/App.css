@@ -81,7 +81,11 @@ form {
 }
 
 .notes-list li {
+  width: 100%;
   list-style-type: none;
+
+  display: flex;
+  justify-content: space-between;
 }
 
 .notes-list .noteItem:last-child {
@@ -170,8 +174,26 @@ form {
   }
 }
 
+.span-secondary {
+  font-size: 14px;
+  color: #000000c2;
+}
+
 @media screen and (max-width: 768px) {
   .App {
-    margin: 30px;
+    margin: 20px;
+    padding: 20px;
   }
+
+  form, .form-save {
+    width: 100%;
+  }
+
+  .form-save input {
+    gap: 0;
+    padding: 0 10px;
+    width: 100%;
+    margin: 5px 0;
+  }
+
 }

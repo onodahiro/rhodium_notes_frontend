@@ -30,8 +30,8 @@ const TodoList = memo(function ({ label, model }) {
     return <>
       <div className='noteItem'>
         <input type='checkbox' onChange={()=>fetchCheckNote(model, value.id)} checked={value.checked}></input>
-        <li style={computedChecked}>
-          {`№${value.id}.  ${value.text}`}
+        <li>
+          <span style={computedChecked}>{`№${value.id}.  ${value.text}`}</span> <span className='span-secondary'>{ value.date_created }</span>
         </li>
       </div>
     </>
@@ -44,6 +44,7 @@ const TodoList = memo(function ({ label, model }) {
         <div className='form-save'>
           <input
             type="text"
+            placeholder="type here..."
             value={input}
             onChange={(event) => model.change(event.currentTarget.value)}
             />
