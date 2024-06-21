@@ -1,4 +1,5 @@
 import './App.css';
+import "toastify-js/src/toastify.css"
 import TodoList from  './components/TodoList.jsx';
 import Pagination from  './components/Pagination.jsx';
 import { createStore, createEvent } from "effector";
@@ -12,26 +13,40 @@ function App() {
     const remove = createEvent();
     const change = createEvent();
     const reset = createEvent();
+    const setLoading = createEvent();
+    const updateChecked = createEvent();
 
   
     const $input = createStore("");
-    const $todos = createStore(initial);
+    const $notes = createStore(initial);
+    const $loading = createStore(true);
     const $pagination = createStore({});
 
-    $input.on(change, (_, value) => value);
+    $input.on(change, (_, val) => val);
+    $notes.on(insert, (_, val) => val);
+    $loading.on(setLoading, (_, val) => val);
+    $pagination.on(insertPages, (_, val) => val);
     $input.reset(insert);
-    $todos.on(insert, (_, notes) => notes)
-    $pagination.on(insertPages, (_, pageData) => pageData)
-  
+    
+    $notes.on(updateChecked, (list, id) =>  
+      list.map((el) => ({
+        ...el,
+        checked: +id === el.id ? !el.checked : el.checked,
+      }))
+    )
+
     return {
       insert,
       remove,
       change,
       insertPages,
       reset,
-      $todos,
+      setLoading,
+      updateChecked,
+      $notes,
       $pagination,
       $input,
+      $loading
     };
   }
   
@@ -39,7 +54,7 @@ function App() {
 
   return (
     <div className="App">
-      <TodoList label="First todo list" model={notesStore} />
+      <TodoList label="LIST" model={notesStore} />
       <Pagination model={notesStore} />
     </div>
   );

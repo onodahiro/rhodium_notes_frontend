@@ -1,19 +1,72 @@
+@import './styles/toast.css';
+
 body {
   height: 100%;
   background-color: #f4f6fa;
+
+  font-size: 16px;
 }
 
 .App {
+  max-width: 950px;
+  padding: 25px;
+  margin: 50px 20vw;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   
-  padding: 25px;
-  margin: 50px 20vw;
   border-radius: 20px;
   border: 1px solid #4e8efb;
   background-color: white;
+}
+
+form {
+  display: flex;
+}
+
+.form-save input {
+  height: 40px;
+  box-sizing: border-box;
+  /* padding: 0; */
+  margin: 0 10px; 
+  font-size: 16px;
+  transition: 0.1s;
+
+  border: 1px solid #4e8efb;
+  border-radius: 5px;
+  background-color: #f4f9ff;
+}
+
+.form-save [type="button"]:focus {
+  animation-duration: 0.3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    background-color:#75a4dcb5;
+  }
+
+  to {
+    background-color: #f4f9ff;
+  }
+}
+
+.form-save input:hover {
+  transition: 0.2s;
+  background-color: #d5e8ff;
+}
+
+
+.notes-container {
+  width: 100%;
+  min-height: 510px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .notes-list {
@@ -40,6 +93,7 @@ body {
   align-items: center;
   gap: 20px;
 
+  transition: 0.2s;
   padding: 10px;
   border-bottom: 1px solid #4e8efb;
 }
@@ -50,14 +104,17 @@ body {
 }
 
 .noteItem:hover:first-child {
+  transition: 0.2s;
   border-radius: 10px 10px 0  0;
 }
 
 .noteItem:hover {
+  transition: 0.2s;
   background-color: #d5e8ff;
 }
 
 .noteItem:hover:last-child {
+  transition: 0.2s;
   border-radius: 0 0 10px 10px;
 }
 
@@ -82,10 +139,12 @@ body {
 
 .pagination-container button:hover:not(.active) {
   z-index: 2;
-  border: 1px solid #94c5ff;
+  background-color: #d5e8ff;
+  border: 1px solid #358cf7;
 }
 
 .pagination-container button.active {
+  color: #3361ae;
   background-color: #d5e8ff;
 }
 

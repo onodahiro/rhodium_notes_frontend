@@ -1,0 +1,7 @@
+.toastify.success-toast {
+    background: linear-gradient(to right, rgb(0 176 107), rgb(152 187 91));
+}
+
+.toastify.error-toast {
+  background: linear-gradient(to right, rgb(237 78 92), rgb(255 186 91));
+}

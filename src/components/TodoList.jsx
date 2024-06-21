@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { useUnit, useList } from "effector-react";
+
+import PuffLoader from "react-spinners/PuffLoader";
 
 // api 
 import { fetchNotes, fetchSaveNotes, fetchCheckNote } from '../api/note.js';
 
-function TodoList({ label, model }) {
-  const isCancelled = React.useRef(false);
+
+const TodoList = memo(function ({ label, model }) {
+  const isCancelled = useRef(false);
   const input = useUnit(model.$input);
+  const [notes] = useUnit(model.$notes);
+  const [loading] = useUnit([model.$loading]);
 
   useEffect(() => {
     if (!isCancelled.current) {
@@ -16,10 +21,8 @@ function TodoList({ label, model }) {
       isCancelled.current = true;
     };
   }, [model]);
-
   
-
-  const todos = useList(model.$todos, (value) => {
+  const notesList = useList(model.$notes, (value) => {
     const computedChecked = {
         textDecoration: value.checked ? 'line-through' : 'none',
     };
@@ -38,17 +41,26 @@ function TodoList({ label, model }) {
     <>
       <h1>{label}</h1>
       <form>
-        <label>Insert: </label>
-        <input
-          type="text"
-          value={input}
-          onChange={(event) => model.change(event.currentTarget.value)}
-          />
-        <input type="button" onClick={() => fetchSaveNotes(model, input)} value="Save" />
-        </form>
-      <ol className='notes-list'>{todos}</ol>
+        <div className='form-save'>
+          <input
+            type="text"
+            value={input}
+            onChange={(event) => model.change(event.currentTarget.value)}
+            />
+          <input type="button" onClick={() => fetchSaveNotes(model, input)} value="Save" />
+        </div>
+      </form>
+        <div className='notes-container'>
+          {
+            loading ? 
+              <PuffLoader color="#4e8efb" /> : 
+              notes ? 
+                <ol className='notes-list'>{notesList}</ol> : 
+                'empty list ...'
+          }
+        </div>
     </>
   );
-}
+})
 
 export default TodoList;
