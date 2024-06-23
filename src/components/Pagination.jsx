@@ -24,12 +24,12 @@ function Pagination({ model }) {
     // возможное наличие последних страниц lastPage - current_page
     // Сколько еще добавленно в список pagesViewed - pages.length
     const lastPagesCount = (lastPage - current_page) > (pagesViewed - pages.length) ? pagesViewed - pages.length : lastPage - current_page
-    if (lastPagesCount) {
+    if (lastPagesCount > 0) {
       pages = pages.concat(Array.from(new Array(lastPagesCount), (_, index) => index + 1 + current_page));
     } 
 
     // добавить все оставшиеся в начало
-    if (pagesViewed - pages.length) {
+    if ((pagesViewed - pages.length) > 0) {
       pages = Array.from(new Array(pagesViewed - pages.length), (_, index) => {
         return pages[0] - (pagesViewed - pages.length) + index
       }).concat(pages);

@@ -2,10 +2,29 @@ import axios from 'axios';
 
 import showToast from '../components/utils/toast.js'
 
-function fetchNotes(model, page = 1) {
-  model.setLoading(true);
+
+
+function lastPage() {
   try {
-    axios.get(`${process.env.REACT_APP_API_NOTES}?page=${page}`)
+    return axios.get(`${process.env.REACT_APP_API_NOTES}/last`)
+    .then(res => {
+      return res.data
+    })
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+async function fetchNotes(model, page) {
+  model.setLoading(true);
+
+  let last_page = page
+  if (!page) {
+    last_page = await lastPage();
+  }
+
+  try {
+    axios.get(`${process.env.REACT_APP_API_NOTES}?page=${last_page}`)
     .then(res => {
       model.insert(res.data.data)
       model.insertPages(res.data.meta)
