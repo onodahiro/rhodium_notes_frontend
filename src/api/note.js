@@ -1,18 +1,14 @@
 import axios from 'axios';
 
-import showToast from '../components/utils/toast.js'
-
-
+import { showSuccessToast, showErrorToast } from '../components/utils/toast.js'
 
 function lastPage() {
-  try {
-    return axios.get(`${process.env.REACT_APP_API_NOTES}/last`)
-    .then(res => {
-      return res.data
-    })
-  } catch (err) {
-    console.log(err);
-  }
+  return axios.get(`${process.env.REACT_APP_API_NOTES}/last`)
+  .then(res => {
+    return res.data
+  }).catch(err => {
+    showErrorToast(err);
+  })
 };
 
 async function fetchNotes(model, page) {
@@ -23,50 +19,45 @@ async function fetchNotes(model, page) {
     last_page = await lastPage();
   }
 
-  try {
-    axios.get(`${process.env.REACT_APP_API_NOTES}?page=${last_page}`)
-    .then(res => {
-      model.insert(res.data.data)
-      model.insertPages(res.data.meta)
-    })
-  } catch (err) {
-    showToast(err.message, 'error-toast')
-  } finally {
+  axios.get(`${process.env.REACT_APP_API_NOTES}?page=${last_page}`)
+  .then(res => {
+    model.insert(res.data.data)
+    model.insertPages(res.data.meta)
+  }).catch(err => {
+    showErrorToast(err);
+  }).finally(() => {
     setTimeout(model.setLoading, 100, false)
-  }
+  })
 };
 
-function fetchSaveNotes(model, text) {
+async function fetchSaveNotes(model, text) {
   model.setLoading(true);
+  let last_page = await lastPage();
 
-  try {
-    axios.post(`${process.env.REACT_APP_API_NOTES}/save`, { text })
-    .then((res) => {
-      if (res.data) {
-        showToast('saved successfully')
-        model.insert(res.data.data)
-        model.insertPages(res.data.meta)
-      }
-    })
-  } catch (err) {
-    showToast(err.message, 'error-toast')
-  } finally {
+  axios.post(`${process.env.REACT_APP_API_NOTES}/save?page=${last_page}`, { text })
+  .then((res) => {
+    if (res.data) {
+      showSuccessToast('Saved successfully')
+      model.insert(res.data.data)
+      model.insertPages(res.data.meta)
+    }
+  }).catch(err => {
+    showErrorToast(err);
+  }).finally(() => {
     setTimeout(model.setLoading, 100, false)
-  }
+  })
 }
 
 function fetchCheckNote(model, id) {
-  try {
-    axios.get(`${process.env.REACT_APP_API_NOTES}/check?id=${id}`)
-    .then((res) => {
-      if (res.data) {
-        showToast('saved successfully')
-        model.updateChecked(res.data.id)
-      }
-    })
-  } catch (err) {
-    showToast(err.message, 'error-toast')
-  }
+  axios.get(`${process.env.REACT_APP_API_NOTES}/check?id=${id}`)
+  .then((res) => {
+    if (res.data) {
+      showSuccessToast('Saved successfully')
+      model.updateChecked(res.data.id)
+    }
+  }).catch(err => {
+    showErrorToast(err);
+  })
 }
 
 export { fetchNotes, fetchSaveNotes, fetchCheckNote };
