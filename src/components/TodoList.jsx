@@ -56,7 +56,7 @@ const TodoList = memo(function ({ label, model }) {
             loading ? 
               <PuffLoader color="#4e8efb" /> : 
               notes ? 
-                <ol className='notes-list'>{notesList}</ol> : 
+                <ol className='notes-list'>{notesList.reverse()}</ol> : 
                 'empty list ...'
           }
         </div>

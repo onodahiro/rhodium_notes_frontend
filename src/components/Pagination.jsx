@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { useUnit } from "effector-react";
 
 // Api
@@ -6,16 +7,34 @@ import { fetchNotes } from '../api/note.js';
 
 function Pagination({ model }) {
   let { current_page, last_page } = useUnit(model.$pagination);
-  
+  const [isFirstPage, setIsFirstPage] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
+
+  useEffect(() => {
+    if (current_page === last_page) {
+      setIsLastPage(true);
+      setIsFirstPage(false);
+    } else if (current_page === 1) {
+      setIsFirstPage(true);
+      setIsLastPage(false);
+    } else {
+      setIsFirstPage(false);
+      setIsLastPage(false);
+    }
+  }, [current_page, last_page]);
+
   const createPagesArray = () => {
     let pages = [];
-
     const lastPage = last_page;
-    const pagesViewed = lastPage > 5 ? 5 : lastPage;
+    const isMobile = window.innerWidth < 768
+    let maxPages = isMobile ? 3 : 5;
 
-    // добавить 2 в начало если надо
+
+    const pagesViewed = lastPage > maxPages ? maxPages : lastPage;
+
+    // добавить 2 в конец если надо
     if (current_page > 1) pages.unshift(current_page - 1);
-    if (current_page > 2) pages.unshift(current_page - 2);
+    if ((current_page > 2) && !isMobile) pages.unshift(current_page - 2);
 
     // добавить среднюю
     pages.push(current_page);
@@ -35,21 +54,21 @@ function Pagination({ model }) {
       }).concat(pages);
     } 
 
-    return pages;
+    return pages.reverse();
   }
 
   return (
     <>
       <div className="pagination-container">
-        <button onClick={()=>fetchNotes(model, 1)}>{'<<<'}</button>
-        <button disabled={current_page === 1} onClick={()=>fetchNotes(model, --current_page)}>{'<'}</button>
+        <button disabled={isLastPage} className={isLastPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, last_page)}>{'<<<'}</button>
+        <button disabled={isLastPage} className={isLastPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, ++current_page)}>{'<'}</button>
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
-            return <button onClick={()=>fetchNotes(model, number)} className={number === current_page ? 'active' : ''} key={index}> {number} </button>
+            return <button onClick={()=> current_page === +number ? false : fetchNotes(model, number)} className={number === current_page ? 'active' : ''} key={index}> {number} </button>
           })) : ''
         }
-        <button disabled={current_page === last_page} onClick={()=>fetchNotes(model, ++current_page )}>{'>'}</button>
-        <button onClick={()=>fetchNotes(model, last_page)}>{'>>>'}</button>
+        <button disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, --current_page)}>{'>'}</button>
+        <button  disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, 1)}>{'>>>'}</button>
       </div>
     </>
   );

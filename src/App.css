@@ -142,7 +142,6 @@ form {
 }
 
 .pagination-container button:hover:not(.active) {
-  z-index: 2;
   background-color: #d5e8ff;
   border: 1px solid #358cf7;
 }
@@ -150,6 +149,22 @@ form {
 .pagination-container button.active {
   color: #3361ae;
   background-color: #d5e8ff;
+}
+
+.pagination-container button.disabled {
+  color: #757575;
+  background-color: #e8e8e8;
+  border: 1px solid #a3a8b1;
+}
+
+.pagination-container button:hover:not(.active).disabled {
+  color: #757575;
+  background-color: #e8e8e8;
+  border: 1px solid #a3a8b1;
+}
+
+.pagination-container button:nth-last-child(2):not(.active).disabled  {
+  border-left: 1px solid #4e8efb;
 }
 
 .pagination-container button:first-child {
