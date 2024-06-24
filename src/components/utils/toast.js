@@ -8,6 +8,6 @@ export default function showToast(text, className = 'success-toast') {
     gravity: "top",
     position: "right", 
     text,
-    className
+    className: `toastify-custom ${className}`
   }).showToast();
 }
