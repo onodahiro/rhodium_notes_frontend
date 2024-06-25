@@ -64,11 +64,16 @@ function Pagination({ model }) {
         <button disabled={isLastPage} className={isLastPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, ++current_page)}>{'<'}</button>
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
-            return <button onClick={()=> current_page === +number ? false : fetchNotes(model, number)} className={number === current_page ? 'active' : ''} key={index}> {number} </button>
+            return <button 
+              onClick={()=> current_page === +number ? false : fetchNotes(model, number)} 
+              className={number === current_page ? 'active' : ''} key={index}
+            >
+              {number}
+            </button>
           })) : ''
         }
         <button disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, --current_page)}>{'>'}</button>
-        <button  disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, 1)}>{'>>>'}</button>
+        <button disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, 1)}>{'>>>'}</button>
       </div>
     </>
   );

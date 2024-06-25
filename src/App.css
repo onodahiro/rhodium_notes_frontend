@@ -1,4 +1,5 @@
 @import './styles/toast.css';
+@import './styles/pagination.css';
 
 body {
   height: 100%;
@@ -29,7 +30,6 @@ form {
 .form-save input {
   height: 40px;
   box-sizing: border-box;
-  /* padding: 0; */
   margin: 0 10px; 
   font-size: 16px;
   transition: 0.1s;
@@ -122,76 +122,15 @@ form {
   border-radius: 0 0 10px 10px;
 }
 
-.pagination-container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.pagination-container button {
-  height: 40px;
-  min-width: 50px;
-  background-color: #f4f9ff;
-
-  border: 1px solid #4e8efb;
-  margin: 0 -1px;
-
-  color: #4e8efb;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 15px;
-}
-
-.pagination-container button:hover:not(.active) {
-  background-color: #d5e8ff;
-  border: 1px solid #358cf7;
-}
-
-.pagination-container button.active {
-  color: #3361ae;
-  background-color: #d5e8ff;
-}
-
-.pagination-container button.disabled {
-  color: #757575;
-  background-color: #e8e8e8;
-  border: 1px solid #a3a8b1;
-}
-
-.pagination-container button:hover:not(.active).disabled {
-  color: #757575;
-  background-color: #e8e8e8;
-  border: 1px solid #a3a8b1;
-}
-
-.pagination-container button:nth-last-child(2):not(.active).disabled  {
-  border-left: 1px solid #4e8efb;
-}
-
-.pagination-container button:first-child {
-  border-radius: 5px 0 0 5px;
-}
-
-.pagination-container button:last-child {
-  border-radius: 0 5px 5px 0;
+.span-secondary {
+  font-size: 14px;
+  color: #000000c2;
 }
 
 @media screen and (max-width: 1200px) {
   .App {
     margin: 50px 15vw;
   }
-
-  .pagination-container button:nth-child(2) {
-    display: none;
-  }
-
-  .pagination-container button:nth-last-child(2) {
-    display: none;
-  }
-}
-
-.span-secondary {
-  font-size: 14px;
-  color: #000000c2;
 }
 
 @media screen and (max-width: 768px) {
@@ -210,5 +149,4 @@ form {
     width: 100%;
     margin: 5px 0;
   }
-
 }
