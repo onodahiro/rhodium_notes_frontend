@@ -81,45 +81,53 @@ form {
 }
 
 .notes-list li {
-  width: 100%;
+  width: auto;
   list-style-type: none;
 
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
 }
 
-.notes-list .noteItem:last-child {
+.notes-list .note-container:last-child {
   border: none;
 }
 
-.noteItem {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
+.note-container {
   transition: 0.2s;
   padding: 10px;
   border-bottom: 1px solid #4e8efb;
 }
 
-.noteItem [type="checkbox"] {
+.note-container [type="checkbox"] {
   width: 20px;
   height: 20px;
 }
 
-.noteItem:hover:first-child {
+.note-container:hover:first-child {
   transition: 0.2s;
   border-radius: 10px 10px 0  0;
 }
 
-.noteItem:hover {
+.note-container:hover {
   transition: 0.2s;
   background-color: #d5e8ff;
 }
 
-.noteItem:hover:last-child {
+.note-container:hover:last-child {
   transition: 0.2s;
   border-radius: 0 0 10px 10px;
+}
+
+.note-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.note-desc {
+  display: flex;
+  justify-content: space-between;
 }
 
 .span-secondary {

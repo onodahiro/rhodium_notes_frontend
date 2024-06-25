@@ -4,8 +4,7 @@ import { useUnit, useList } from "effector-react";
 import PuffLoader from "react-spinners/PuffLoader";
 
 // api 
-import { fetchNotes, fetchSaveNotes, fetchCheckNote } from '../api/note.js';
-
+import { fetchNotes, fetchSaveNotes, fetchCheckNote } from '../api/noteApi.js';
 
 const TodoList = memo(function ({ label, model }) {
   const isCancelled = useRef(false);
@@ -28,12 +27,16 @@ const TodoList = memo(function ({ label, model }) {
     };
 
     return <>
-      <div className='noteItem'>
-        <input type='checkbox' onChange={()=>fetchCheckNote(model, value.id)} checked={value.checked}></input>
-        <li>
-          <span style={computedChecked}>{`№${value.id}.  ${value.text}`}</span> <span className='span-secondary'>{ value.date_created }</span>
-        </li>
-      </div>
+      <li className='note-container'>
+        <div className='note-text'>
+          <input type='checkbox' onChange={()=>fetchCheckNote(model, value.id)} checked={value.checked}></input>
+          <span style={computedChecked}>{`№${value.id}.  ${value.text}`}</span>
+        </div>
+        <div className='note-desc'>
+          <span>{''}</span>
+          <span className='span-secondary'>{ value.date_created }</span>
+        </div>
+      </li>
     </>
   });
 

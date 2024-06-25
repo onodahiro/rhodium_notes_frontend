@@ -2,7 +2,7 @@ import Toastify from 'toastify-js'
 
 function showToast(text, className) {
   Toastify({
-    duration: 3000,
+    duration: 4000,
     close: true,
     gravity: "top",
     position: "right", 

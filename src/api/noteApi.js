@@ -32,18 +32,15 @@ async function fetchNotes(model, page) {
 
 async function fetchSaveNotes(model, text) {
   model.setLoading(true);
-  let last_page = await lastPage();
-
-  axios.post(`${process.env.REACT_APP_API_NOTES}/save?page=${last_page}`, { text })
+  
+  axios.post(`${process.env.REACT_APP_API_NOTES}/save`, { text })
   .then((res) => {
     if (res.data) {
-      showSuccessToast('Saved successfully')
-      model.insert(res.data.data)
-      model.insertPages(res.data.meta)
+      showSuccessToast(res.data.message)
+      fetchNotes(model);
     }
   }).catch(err => {
     showErrorToast(err);
-  }).finally(() => {
     setTimeout(model.setLoading, 100, false)
   })
 }

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useUnit } from "effector-react";
 
 // Api
-import { fetchNotes } from '../api/note.js';
+import { fetchNotes } from '../api/noteApi.js';
 
 function Pagination({ model }) {
   let { current_page, last_page } = useUnit(model.$pagination);
