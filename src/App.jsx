@@ -1,74 +1,61 @@
 import './App.css';
-import TodoList from  './pages/TodoList.jsx';
-import { createStore, createEvent, sample } from "effector";
+import "toastify-js/src/toastify.css"
+import TodoList from  './components/TodoList.jsx';
+import Pagination from  './components/Pagination.jsx';
+import { createStore, createEvent } from "effector";
+
+
 
 function App() {
   function createTodoListApi(initial = []) {
     const insert = createEvent();
+    const insertPages = createEvent();
     const remove = createEvent();
     const change = createEvent();
-    const search = createEvent();
-    const filterTodo = createEvent();
     const reset = createEvent();
+    const setLoading = createEvent();
+    const updateChecked = createEvent();
+
   
     const $input = createStore("");
-    const $searchInput = createStore("");
-    const $todos = createStore(initial);
-    const $filteredTodos = createStore(initial);
-  
-    $input.on(change, (_, value) => value);
-    $searchInput.on(search, (_, value) => value);
-  
+    const $notes = createStore(initial);
+    const $loading = createStore(true);
+    const $pagination = createStore({});
 
-    // insert action
+    $input.on(change, (_, val) => val);
+    $notes.on(insert, (_, val) => val);
+    $loading.on(setLoading, (_, val) => val);
+    $pagination.on(insertPages, (_, val) => val);
     $input.reset(insert);
-    $todos.on(insert, (todos, newTodo) => [...todos, newTodo]);
-    $filteredTodos.on(insert, () => $todos.getState());
+    
+    $notes.on(updateChecked, (list, id) =>  
+      list.map((el) => ({
+        ...el,
+        checked: +id === el.id ? !el.checked : el.checked,
+      }))
+    )
 
-    // filtered action
-    $filteredTodos.on(filterTodo, (todos, val) =>   {
-      const preTodos = $todos.getState();
-      return preTodos ? preTodos.filter((el) => el.includes(val)) :  $todos.getState();
-    });
-
-    // remove action
-    $todos.on(remove, (todos, index) => todos.filter((_, i) => i !== index));
-    $filteredTodos.on(remove, () => $todos.getState());
-    $input.reset(reset);
-  
-    const submit = createEvent();
-    submit.watch((event) => event.preventDefault());
-  
-    sample({
-      clock: submit,
-      source: $input,
-      target: insert,
-    });
-
-    sample({
-      clock: search,
-      source: $searchInput,
-      target: filterTodo,
-    });
-  
     return {
-      submit,
+      insert,
       remove,
       change,
-      search,
+      insertPages,
       reset,
-      $todos,
+      setLoading,
+      updateChecked,
+      $notes,
+      $pagination,
       $input,
-      $searchInput,
-      $filteredTodos
+      $loading
     };
   }
   
-  const firstTodoList = createTodoListApi(["hello, world!"]);
+  const notesStore = createTodoListApi();
 
   return (
     <div className="App">
-      <TodoList label="First todo list" model={firstTodoList} />
+      <TodoList label="LIST" model={notesStore} />
+      <Pagination model={notesStore} />
     </div>
   );
 }
