@@ -12,17 +12,20 @@ function App() {
     const insertPages = createEvent();
     const remove = createEvent();
     const change = createEvent();
+    const changeSearch = createEvent();
     const reset = createEvent();
     const setLoading = createEvent();
     const updateChecked = createEvent();
 
   
     const $input = createStore("");
+    const $searchInput = createStore("");
     const $notes = createStore(initial);
     const $loading = createStore(true);
     const $pagination = createStore({});
 
     $input.on(change, (_, val) => val);
+    $searchInput.on(changeSearch, (_, val) => val);
     $notes.on(insert, (_, val) => val);
     $loading.on(setLoading, (_, val) => val);
     $pagination.on(insertPages, (_, val) => val);
@@ -39,6 +42,7 @@ function App() {
       insert,
       remove,
       change,
+      changeSearch,
       insertPages,
       reset,
       setLoading,
@@ -46,6 +50,7 @@ function App() {
       $notes,
       $pagination,
       $input,
+      $searchInput,
       $loading
     };
   }

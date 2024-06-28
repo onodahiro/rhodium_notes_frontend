@@ -130,6 +130,21 @@ form {
   justify-content: space-between;
 }
 
+.note-tags {
+  display: flex;
+  gap: 10px; 
+} 
+
+.note-tags__tag {
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.note-tags__tag:hover {
+  text-decoration: none;
+}
+
 .span-secondary {
   font-size: 14px;
   color: #000000c2;
