@@ -1,5 +1,6 @@
 @import './styles/toast.css';
-@import './styles/pagination.css';
+@import './styles/Pagination.scss';
+@import './styles/utils/CSearch.scss';
 
 body {
   height: 100%;
@@ -24,6 +25,10 @@ body {
 }
 
 form {
+  display: flex;
+}
+
+.form-save {
   display: flex;
 }
 
@@ -147,7 +152,7 @@ form {
 
 .span-secondary {
   font-size: 14px;
-  color: #000000c2;
+  color: #757575;
 }
 
 @media screen and (max-width: 1200px) {

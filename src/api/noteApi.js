@@ -3,7 +3,7 @@ import axios from 'axios';
 import { showSuccessToast, showErrorToast } from '../components/utils/toast.js'
 
 function lastPage(tag = '') {
-  return axios.get(`${process.env.REACT_APP_API_NOTES}/last?byTag=${tag}`)
+  return axios.get(`${process.env.REACT_APP_API_NOTES}/last-page?byTag=${tag}`)
   .then(res => {
     return res.data
   }).catch(err => {
@@ -57,14 +57,13 @@ function fetchCheckNote(model, id) {
   })
 }
 
-const searchNotes = async (model, tag, page) => {
+async function searchNotes(model, tag, page) { // to do search notes
 
   let last_page = page
   if (!page) {
     last_page = await lastPage(tag);
   }
 
-  console.log(model, tag);
   axios.get(`${process.env.REACT_APP_API_NOTES}?byTag=${tag}`)
   .then(res => {
     model.insert(res.data.data)
@@ -76,4 +75,15 @@ const searchNotes = async (model, tag, page) => {
   })
 }
 
-export { fetchNotes, fetchSaveNotes, fetchCheckNote, searchNotes };
+async function fetchPreloadTags(model, text) {
+  axios.get(`${process.env.REACT_APP_API_NOTES}/tag?text=${text}`)
+  .then(res => {
+    model.changeResults(res.data.data)
+  }).catch(err => {
+    showErrorToast(err);
+  }).finally(() => {
+    model.changeLoading(false)
+  })
+}
+
+export { fetchNotes, fetchSaveNotes, fetchCheckNote, fetchPreloadTags };

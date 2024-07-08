@@ -1,11 +1,13 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { useUnit, useList } from "effector-react";
 
 import PuffLoader from "react-spinners/PuffLoader";
 
 // api 
-import { fetchNotes, fetchSaveNotes, fetchCheckNote, searchNotes } from '../api/noteApi.js';
+import { fetchNotes, fetchSaveNotes, fetchCheckNote, fetchPreloadTags } from '../api/noteApi.js';
 import useDebounce from './utils/debouce.jsx';
+import CSearch from './utils/CSearch.jsx';
+import  CSearchStore   from './utils/CSearchStore.jsx';
 
 const TodoList = memo(function ({ label, model }) {
   const isCancelled = useRef(false);
@@ -14,47 +16,55 @@ const TodoList = memo(function ({ label, model }) {
   const [notes] = useUnit(model.$notes);
   const [loading] = useUnit([model.$loading]);
 
+
+  const inputStore = CSearchStore();
+  console.log('rerender');
+
   useEffect(() => {
     if (!isCancelled.current) {
+      console.log('fetch notes');
       fetchNotes(model);
     };
     return () => {
       isCancelled.current = true;
     };
-  }, [model]);
+  }, []);
 
-  const debouncedSearchTerm = useDebounce(searchInput, 400);
+  const debouncedSearchTerm = useDebounce(searchInput, 200);
 
   useEffect(
     () => {
-      model.setLoading(true);
-        // Сделать запрос к АПИ
-        console.log('debouncedSearchTerm', debouncedSearchTerm);
-        searchNotes(model, debouncedSearchTerm)
+      if (debouncedSearchTerm) {
+        console.log(isCancelled.current);
+        model.setLoading(true);
+        // searchNotes(model, debouncedSearchTerm)
+      } else {
+        // пустой результат
+      }
     },
     [debouncedSearchTerm]
   );
 
-  const notesList = useList(model.$notes, (value) => {
+  const notesList = useList(model.$notes, (el) => {
     const computedChecked = {
-        textDecoration: value.checked ? 'line-through' : 'none',
+        textDecoration: el.checked ? 'line-through' : 'none',
     };
 
     return <>
       <li className='note-container'>
         <div className='note-text'>
-          <input type='checkbox' onChange={()=>fetchCheckNote(model, value.id)} checked={value.checked}></input>
-          <span style={computedChecked}>{`№${value.id}.  ${value.text}`}</span>
+          <input type='checkbox' onChange={()=>fetchCheckNote(model, el.id)} checked={el.checked}></input>
+          <span style={computedChecked}>{`№${el.id}.  ${el.text}`}</span>
         </div>
         <div className='note-desc'>
           <div className='note-tags'>
             {
-              value.tags.map((el, index) => {
+              el.tags.map((el, index) => {
                 return <span className='note-tags__tag' key={index}>{`#${el}`}</span>
               })
             }
           </div>
-          <span className='span-secondary'>{ value.date_created }</span>
+          <span className='span-secondary'>{ el.date_created }</span>
         </div>
       </li>
     </>
@@ -77,12 +87,7 @@ const TodoList = memo(function ({ label, model }) {
             onClick={() => fetchSaveNotes(model, input)}
             value="Save"
           />
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchInput}
-            onChange={(event) => model.changeSearch(event.currentTarget.value)}
-            />
+          <CSearch model={inputStore} searchFn={fetchPreloadTags} placeholder="Search tags"/>
         </div>
       </form>
         <div className='notes-container'>

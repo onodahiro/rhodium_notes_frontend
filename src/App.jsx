@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import "toastify-js/src/toastify.css"
 import TodoList from  './components/TodoList.jsx';
 import Pagination from  './components/Pagination.jsx';
