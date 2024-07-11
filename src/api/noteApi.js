@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-import { showSuccessToast, showErrorToast } from '../components/utils/toast.js'
+import { showSuccessToast, showErrorToast } from '../components/utils/Toast.js'
 
-function lastPage(tag = '') {
-  return axios.get(`${process.env.REACT_APP_API_NOTES}/last-page?byTag=${tag}`)
+const URL = process.env.REACT_APP_API_NOTES;
+function lastPage(id = '') {
+  return axios.get(`${URL}/last-page?byTagId=${id}`)
   .then(res => {
     return res.data
   }).catch(err => {
@@ -13,16 +14,12 @@ function lastPage(tag = '') {
 
 async function fetchNotes(model, page) {
   model.setLoading(true);
+  if (!page) page = await lastPage();
 
-  let last_page = page
-  if (!page) {
-    last_page = await lastPage();
-  }
-
-  axios.get(`${process.env.REACT_APP_API_NOTES}?page=${last_page}`)
+  axios.get(`${URL}?page=${page}`)
   .then(res => {
     model.insert(res.data.data)
-    model.insertPages(res.data.meta)
+    model.setPages(res.data.meta)
   }).catch(err => {
     showErrorToast(err);
   }).finally(() => {
@@ -33,7 +30,7 @@ async function fetchNotes(model, page) {
 async function fetchSaveNotes(model, text) {
   model.setLoading(true);
   
-  axios.post(`${process.env.REACT_APP_API_NOTES}/save`, { text })
+  axios.post(`${URL}/save`, { text })
   .then((res) => {
     if (res.data) {
       showSuccessToast(res.data.message)
@@ -46,7 +43,7 @@ async function fetchSaveNotes(model, text) {
 }
 
 function fetchCheckNote(model, id) {
-  axios.get(`${process.env.REACT_APP_API_NOTES}/check?id=${id}`)
+  axios.get(`${URL}/check?id=${id}`)
   .then((res) => {
     if (res.data) {
       showSuccessToast('Saved successfully')
@@ -57,17 +54,13 @@ function fetchCheckNote(model, id) {
   })
 }
 
-async function searchNotes(model, tag, page) { // to do search notes
+async function fetchNotesByTag(model, id, page) {
+  if (!page) page = await lastPage(id);
 
-  let last_page = page
-  if (!page) {
-    last_page = await lastPage(tag);
-  }
-
-  axios.get(`${process.env.REACT_APP_API_NOTES}?byTag=${tag}`)
+  axios.post(`${URL}/by-tag?page=${page}`,  { id })
   .then(res => {
     model.insert(res.data.data)
-    model.insertPages(res.data.meta)
+    model.setPages(res.data.meta)
   }).catch(err => {
     showErrorToast(err);
   }).finally(() => {
@@ -76,7 +69,7 @@ async function searchNotes(model, tag, page) { // to do search notes
 }
 
 async function fetchPreloadTags(model, text) {
-  axios.get(`${process.env.REACT_APP_API_NOTES}/tag?text=${text}`)
+  axios.get(`${URL}/tag?text=${text}`)
   .then(res => {
     model.changeResults(res.data.data)
   }).catch(err => {
@@ -86,4 +79,4 @@ async function fetchPreloadTags(model, text) {
   })
 }
 
-export { fetchNotes, fetchSaveNotes, fetchCheckNote, fetchPreloadTags };
+export { fetchNotes, fetchSaveNotes, fetchCheckNote, fetchPreloadTags, fetchNotesByTag };

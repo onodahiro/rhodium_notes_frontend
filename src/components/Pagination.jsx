@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
 import { useUnit } from "effector-react";
-
-// Api
-import { fetchNotes } from '../api/noteApi.js';
+import { fetchNotes, fetchNotesByTag } from '../api/noteApi.js';
+import CButton from './utils/CButton.jsx';
 
 function Pagination({ model }) {
   let { current_page, last_page } = useUnit(model.$pagination);
+  let tag = useUnit(model.$tag);
   const [isFirstPage, setIsFirstPage] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
 
@@ -22,6 +21,14 @@ function Pagination({ model }) {
       setIsLastPage(false);
     }
   }, [current_page, last_page]);
+
+  function handleFetchNotes(model, page) {
+    if (tag) {
+      fetchNotesByTag(model, tag.id, page)
+    } else {
+      fetchNotes(model, page);
+    }
+  }
 
   const createPagesArray = () => {
     let pages = [];
@@ -60,20 +67,36 @@ function Pagination({ model }) {
   return (
     <>
       <div className="pagination-container">
-        <button disabled={isLastPage} className={isLastPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, last_page)}>{'<<<'}</button>
-        <button disabled={isLastPage} className={isLastPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, ++current_page)}>{'<'}</button>
+        <CButton 
+          text='<<<'
+          disabled={isLastPage}
+          clickFn={() => handleFetchNotes(model, last_page)} 
+        />
+        <CButton 
+          text='<'
+          disabled={isLastPage} 
+          clickFn={() => handleFetchNotes(model, ++current_page)}
+        />
         { 
           createPagesArray() ? (createPagesArray().map((number, index) => {
-            return <button 
-              onClick={()=> current_page === +number ? false : fetchNotes(model, number)} 
-              className={number === current_page ? 'active' : ''} key={index}
-            >
-              {number}
-            </button>
+            return <CButton 
+              key={index}
+              text={number}
+              className={'button-primary ' + (number === current_page ? 'p-active' : '')}
+              clickFn={()=> current_page === +number ? false : handleFetchNotes(model, number)} 
+            />
           })) : ''
         }
-        <button disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, --current_page)}>{'>'}</button>
-        <button disabled={isFirstPage} className={isFirstPage ? 'disabled' : ''} onClick={()=>fetchNotes(model, 1)}>{'>>>'}</button>
+        <CButton 
+          text='>' 
+          disabled={isFirstPage} 
+          clickFn={() => handleFetchNotes(model, --current_page)}
+        />
+        <CButton 
+          text='>>>' 
+          disabled={isFirstPage} 
+          clickFn={() => handleFetchNotes(model, 1)}
+        />
       </div>
     </>
   );

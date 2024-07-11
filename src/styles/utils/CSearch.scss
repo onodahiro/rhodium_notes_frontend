@@ -5,6 +5,7 @@
   background-color: #f4f9ff;
   
   .csearch {
+    height: 38px;
     padding: 10px;
     border: none;
     min-width: 200px;
@@ -12,10 +13,15 @@
   }
 
   .csearch-loader {
-    height: 40px;
-    transform: translate(40%, -5px);
-    display: flex;
-    align-items: center;
+    position: absolute;
+    left: -1px;
+    width: 116px;
+    height: 35px;
+    padding: 4px 0 0 42%;
+    border-radius: 0 0  5px 5px;
+    border: 1px solid #4e8efb;
+    border-top: 0px;
+    background-color: #f4f9ff;
   }
   
   .csearch.csearch-active {

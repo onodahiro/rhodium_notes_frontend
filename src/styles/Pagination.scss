@@ -3,38 +3,17 @@
   align-items: center;
   flex-wrap: wrap;
   
-  button {
-    height: 40px;
+  .button-primary {
     min-width: 50px;
-    background-color: #f4f9ff;
-    
-    border: 1px solid #4e8efb;
     margin: 0 -1px;
-    
-    color: #4e8efb;
-    font-family: Helvetica, Arial, sans-serif;
+
     font-size: 15px;
+    color: #4e8efb;
+    border-radius: 0px;
     
-    &:hover:not(.active) {
-      background-color: #d5e8ff;
-      border: 1px solid #358cf7;
-    }
-    
-    &.active {
+    &.p-active {
       color: #3361ae;
       background-color: #d5e8ff;
-    }
-    
-    &.disabled {
-      color: #757575;
-      background-color: #e8e8e8;
-      border: 1px solid #a3a8b1;
-    }
-    
-    &:hover:not(.active).disabled {
-      color: #757575;
-      background-color: #e8e8e8;
-      border: 1px solid #a3a8b1;
     }
     
     &:nth-last-child(2):not(.active).disabled  {

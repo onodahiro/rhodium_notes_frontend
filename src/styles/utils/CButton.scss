@@ -1,0 +1,35 @@
+.button-primary {
+  width: 100%;
+  min-width: 40px;
+  max-width: fit-content;
+  height: 40px;
+  margin: 0 20px;
+  box-sizing: border-box;
+
+
+  transition: 0.1s;
+  font-size: 16px;
+  background-color: #f4f9ff;
+  border-radius: 5px;
+  border: 1px solid #4e8efb;
+  
+  &:hover {
+    transition: 0.2s;
+    background-color: #d5e8ff;
+  }
+  
+  &:disabled, &:hover:disabled {
+    color: #757575;
+    background-color: #e8e8e8;
+    border: 1px solid #a3a8b1;
+  }
+
+  &:active {
+    transition: 0.3s;
+    background-color:  #6a89e8;
+  }
+
+  @media screen and (max-width: 1200px) {
+    margin: 0 10px;
+  }
+}

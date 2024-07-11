@@ -11,7 +11,7 @@ function showToast(text, className) {
   }).showToast();
 }
 
-export function showSuccessToast(text, className = 'success-toast') {
+export function showSuccessToast(text) {
   showToast(text, 'success-toast');
 }
 

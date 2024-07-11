@@ -1,24 +1,29 @@
-import React, { useRef, useState, useEffect, memo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useUnit, useList } from "effector-react";
 
 import PuffLoader from "react-spinners/PuffLoader";
 
-import useDebounce from './debouce.jsx';
+import useDebounce from '../../hooks/useDebouce.jsx';
 
-const CSearch = memo(({ model, searchFn, placeholder }) => {
+const CSearch = ({ model, searchFn, pickFn, placeholder }) => {
+  const [ isShowResults, setIsShowResults ] = useState(false);
   const searchInput  = useUnit(model.$searchInput);
   const loading  = useUnit(model.$searchLoading);
   const [ searchResults ] = useUnit(model.$searchResults);
-  const [isShowResults, setIsShowResults] = useState(false);
   const DSearchInput = useDebounce(searchInput, 300);
   const wrapperRef = useRef(null);
   useOutsideShow(wrapperRef);
 
   const handleInput = (val) => {
-    if (!searchResults) {
-      model.changeLoading(true);
-    }
+    model.changeLoading(true);
     model.changeSearch(val);
+
+    setTimeout(model.changeLoading, 500, false);
+  }
+
+  const pick = (val) => {
+    setIsShowResults(false)
+    pickFn(val);
   }
 
   useEffect(
@@ -50,7 +55,7 @@ const CSearch = memo(({ model, searchFn, placeholder }) => {
   const resultsList = useList(model.$searchResults, (el) => {
     return <>
     <div className='csearch-item-wrapper'>
-      <li key={el.id}>
+      <li key={el.id} onClick={() => pick(el)}>
         {el.text}
       </li>
     </div>
@@ -84,6 +89,6 @@ const CSearch = memo(({ model, searchFn, placeholder }) => {
       </div>
     </>
   );
-})
+}
 
 export default CSearch;
