@@ -72,19 +72,19 @@ const CSearch = ({ model, searchFn, pickFn, placeholder }) => {
           placeholder={placeholder}
           onChange={(event) => handleInput(event.currentTarget.value)}
         />
-        { 
+        {
           !isShowResults || !searchInput.trim() ? '' :
-            loading ? 
+            loading ?
             <div className="csearch-loader">
-              <PuffLoader size={20}  color="#4e8efb" />
+              <PuffLoader size={20} style={{position: 'absolute', width: '30px'}} color="#4e8efb" />
             </div> :
-            searchResults ? 
+            searchResults ?
               <ol>{resultsList}</ol> :
                 <ol>
                   <li className="csearch-not-found">
                     {'tags not found'}
                   </li>
-                </ol>  
+                </ol>
         }
       </div>
     </>
