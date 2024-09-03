@@ -41,12 +41,13 @@ const TodoList = memo(function ({ label, model }) {
     const computedChecked = {
         textDecoration: el.checked ? 'line-through' : 'none',
     };
+    let id = el.id ? `№${el.id}.` : '...';
 
     return <>
       <li className='note-container'>
         <div className='note-text'>
           <input type='checkbox' onChange={()=>fetchCheckNote(model, el.id)} checked={el.checked}></input>
-          <span style={computedChecked}>{`№${el.id}.  ${el.text}`}</span>
+          <span style={computedChecked}>{`${id}  ${el.text}`}</span>
         </div>
         <div className='note-desc'>
           <div className='note-tags'>
@@ -101,8 +102,6 @@ const TodoList = memo(function ({ label, model }) {
       </div>
         <div className='notes-container'>
           {
-            loading ? 
-              <PuffLoader color="#4e8efb" /> : 
               notes ? 
                 <ol className='notes-list'>{notesList.reverse()}</ol> :
                 'empty list ...'

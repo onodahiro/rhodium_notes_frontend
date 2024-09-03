@@ -7,7 +7,8 @@ function lastPage(id = '') {
   return axios.get(`${URL}/last-page?byTagId=${id}`)
   .then(res => {
     return res.data
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
   })
 };
@@ -20,23 +21,25 @@ async function fetchNotes(model, page) {
   .then(res => {
     model.insert(res.data.data)
     model.setPages(res.data.meta)
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
-  }).finally(() => {
+  })
+  .finally(() => {
     setTimeout(model.setLoading, 100, false)
   })
 };
 
 async function fetchSaveNotes(model, text) {
   model.setLoading(true);
-  
   axios.post(`${URL}/save`, { text })
   .then((res) => {
     if (res.data) {
       showSuccessToast(res.data.message)
       fetchNotes(model);
     }
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
     setTimeout(model.setLoading, 100, false)
   })
@@ -49,7 +52,8 @@ function fetchCheckNote(model, id) {
       showSuccessToast('Saved successfully')
       model.updateChecked(res.data.id)
     }
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
   })
 }
@@ -61,9 +65,11 @@ async function fetchNotesByTag(model, id, page) {
   .then(res => {
     model.insert(res.data.data)
     model.setPages(res.data.meta)
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
-  }).finally(() => {
+  })
+  .finally(() => {
     setTimeout(model.setLoading, 100, false)
   })
 }
@@ -72,9 +78,11 @@ async function fetchPreloadTags(model, text) {
   axios.get(`${URL}/tag?text=${text}`)
   .then(res => {
     model.changeResults(res.data.data)
-  }).catch(err => {
+  })
+  .catch(err => {
     showErrorToast(err);
-  }).finally(() => {
+  })
+  .finally(() => {
     model.changeLoading(false)
   })
 }

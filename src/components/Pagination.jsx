@@ -23,6 +23,9 @@ function Pagination({ model }) {
   }, [current_page, last_page]);
 
   function handleFetchNotes(model, page) {
+    const loadArr = Array.from(Array(10), () => ({text: '', tags: [], checked: false, date_created: '...'}))
+    model.insert(loadArr)
+
     if (tag) {
       fetchNotesByTag(model, tag.id, page)
     } else {
@@ -52,14 +55,14 @@ function Pagination({ model }) {
     const lastPagesCount = (lastPage - current_page) > (pagesViewed - pages.length) ? pagesViewed - pages.length : lastPage - current_page
     if (lastPagesCount > 0) {
       pages = pages.concat(Array.from(new Array(lastPagesCount), (_, index) => index + 1 + current_page));
-    } 
+    }
 
     // добавить все оставшиеся в начало
     if ((pagesViewed - pages.length) > 0) {
       pages = Array.from(new Array(pagesViewed - pages.length), (_, index) => {
         return pages[0] - (pagesViewed - pages.length) + index
       }).concat(pages);
-    } 
+    }
 
     return pages.reverse();
   }
@@ -67,19 +70,19 @@ function Pagination({ model }) {
   return (
     <>
       <div className="pagination-container">
-        <CButton 
+        <CButton
           text='<<<'
           disabled={isLastPage}
-          clickFn={() => handleFetchNotes(model, last_page)} 
+          clickFn={() => handleFetchNotes(model, last_page)}
         />
-        <CButton 
+        <CButton
           text='<'
-          disabled={isLastPage} 
+          disabled={isLastPage}
           clickFn={() => handleFetchNotes(model, ++current_page)}
         />
-        { 
+        {
           createPagesArray() ? (createPagesArray().map((number, index) => {
-            return <CButton 
+            return <CButton
               key={index}
               text={number}
               className={'button-primary ' + (number === current_page ? 'p-active' : '')}
@@ -87,14 +90,14 @@ function Pagination({ model }) {
             />
           })) : ''
         }
-        <CButton 
-          text='>' 
-          disabled={isFirstPage} 
+        <CButton
+          text='>'
+          disabled={isFirstPage}
           clickFn={() => handleFetchNotes(model, --current_page)}
         />
-        <CButton 
-          text='>>>' 
-          disabled={isFirstPage} 
+        <CButton
+          text='>>>'
+          disabled={isFirstPage}
           clickFn={() => handleFetchNotes(model, 1)}
         />
       </div>
