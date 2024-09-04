@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div className="App">
-      <NotesList label="LIST" model={notesStore} />
+      <NotesList label="NOTES LIST" model={notesStore} />
       <Pagination model={notesStore} />
     </div>
   );

@@ -1,8 +1,6 @@
 import React, { memo, useEffect, useRef } from 'react';
 import { useUnit, useList } from "effector-react";
 
-import PuffLoader from "react-spinners/PuffLoader";
-
 // api 
 import { fetchNotes, fetchSaveNotes, fetchCheckNote, fetchPreloadTags, fetchNotesByTag } from '../api/noteApi.js';
 import CSearch from './utils/CSearch.jsx';
@@ -14,8 +12,6 @@ const TodoList = memo(function ({ label, model }) {
   const input = useUnit(model.$input);
   const tag = useUnit(model.$tag);
   const [notes] = useUnit(model.$notes);
-  const [loading] = useUnit([model.$loading]);
-
 
   const inputStore = CSearchStore();
 
@@ -103,7 +99,7 @@ const TodoList = memo(function ({ label, model }) {
         <div className='notes-container'>
           {
               notes ? 
-                <ol className='notes-list'>{notesList.reverse()}</ol> :
+                <ol className='notes-list'>{notesList}</ol> :
                 'empty list ...'
           }
         </div>

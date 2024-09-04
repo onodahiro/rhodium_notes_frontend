@@ -64,7 +64,7 @@ function Pagination({ model }) {
       }).concat(pages);
     }
 
-    return pages.reverse();
+    return pages;
   }
 
   return (
@@ -72,13 +72,13 @@ function Pagination({ model }) {
       <div className="pagination-container">
         <CButton
           text='<<<'
-          disabled={isLastPage}
-          clickFn={() => handleFetchNotes(model, last_page)}
+          disabled={isFirstPage}
+          clickFn={() => handleFetchNotes(model, 1)}
         />
         <CButton
           text='<'
-          disabled={isLastPage}
-          clickFn={() => handleFetchNotes(model, ++current_page)}
+          disabled={isFirstPage}
+          clickFn={() => handleFetchNotes(model, --current_page)}
         />
         {
           createPagesArray() ? (createPagesArray().map((number, index) => {
@@ -92,13 +92,13 @@ function Pagination({ model }) {
         }
         <CButton
           text='>'
-          disabled={isFirstPage}
-          clickFn={() => handleFetchNotes(model, --current_page)}
+          disabled={isLastPage}
+          clickFn={() => handleFetchNotes(model, ++current_page)}
         />
         <CButton
           text='>>>'
-          disabled={isFirstPage}
-          clickFn={() => handleFetchNotes(model, 1)}
+          disabled={isLastPage}
+          clickFn={() => handleFetchNotes(model, last_page)}
         />
       </div>
     </>

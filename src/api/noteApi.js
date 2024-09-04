@@ -13,9 +13,8 @@ function lastPage(id = '') {
   })
 };
 
-async function fetchNotes(model, page) {
+async function fetchNotes(model, page = 1) {
   model.setLoading(true);
-  if (!page) page = await lastPage();
 
   axios.get(`${URL}?page=${page}`)
   .then(res => {
@@ -58,8 +57,7 @@ function fetchCheckNote(model, id) {
   })
 }
 
-async function fetchNotesByTag(model, id, page) {
-  if (!page) page = await lastPage(id);
+async function fetchNotesByTag(model, id, page = 1) {
 
   axios.post(`${URL}/by-tag?page=${page}`,  { id })
   .then(res => {
