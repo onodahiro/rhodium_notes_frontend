@@ -1,5 +1,7 @@
-@import './styles/toast.css';
-@import './styles/pagination.css';
+@import './styles/Toast.scss';
+@import './styles/Pagination.scss';
+@import './styles/utils/CSearch.scss';
+@import './styles/utils/CButton.scss';
 
 body {
   height: 100%;
@@ -17,20 +19,34 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  
+
   border-radius: 20px;
   border: 1px solid #4e8efb;
   background-color: white;
 }
 
-form {
+h1 {
+  margin: 10px 0;
+}
+
+.form-container {
   display: flex;
+  width: 100%;
+}
+
+.form-save {
+  width: 100%;
+  margin: 10px 10%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .form-save input {
   height: 40px;
+  min-width: 40px;
   box-sizing: border-box;
-  margin: 0 10px; 
+  margin: 0 10px 0 0;
   font-size: 16px;
   transition: 0.1s;
 
@@ -74,6 +90,7 @@ form {
   padding: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   border-radius: 10px;
   background-color: #f4f9ff;
@@ -81,55 +98,72 @@ form {
 }
 
 .notes-list li {
-  width: 100%;
+  width: auto;
   list-style-type: none;
 
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
 }
 
-.notes-list .noteItem:last-child {
+.notes-list .note-container:last-child {
   border: none;
 }
 
-.noteItem {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
+.note-container {
   transition: 0.2s;
   padding: 10px;
   border-bottom: 1px solid #4e8efb;
 }
 
-.noteItem [type="checkbox"] {
+.note-container [type="checkbox"] {
   width: 20px;
   height: 20px;
 }
 
-.noteItem:hover:first-child {
-  transition: 0.2s;
-  border-radius: 10px 10px 0  0;
-}
-
-.noteItem:hover {
+.note-container:hover {
   transition: 0.2s;
   background-color: #d5e8ff;
 }
 
-.noteItem:hover:last-child {
-  transition: 0.2s;
-  border-radius: 0 0 10px 10px;
+.note-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.note-desc {
+  display: flex;
+  justify-content: space-between;
+}
+
+.note-tags {
+  display: flex;
+  gap: 10px;
+}
+
+.note-tags__tag {
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.note-tags__tag:hover {
+  text-decoration: none;
 }
 
 .span-secondary {
   font-size: 14px;
-  color: #000000c2;
+  color: #757575;
 }
 
 @media screen and (max-width: 1200px) {
   .App {
     margin: 50px 15vw;
+  }
+
+  .form-save {
+    margin: 10px 0;
   }
 }
 
@@ -139,8 +173,25 @@ form {
     padding: 20px;
   }
 
+  .form-container {
+    justify-content: center;
+  }
+
+  .form-text-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   form, .form-save {
     width: 100%;
+    max-width: 500px;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .button-primary {
+    margin-right: 0;
   }
 
   .form-save input {
